@@ -1,0 +1,9 @@
+spring.jackson.property-naming-strategy=SNAKE_CASE
+
+rtmUrl=https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads
+slackIncomingWebhookUrl=https://hooks.slack.com/services/
+
+slackBotToken=
+slashCommandToken=
+
+redisUrl=
