@@ -1,9 +1,9 @@
 package com.urban.envbot.commands
 
 import com.urban.envbot.users.UserDetailsFetcher
+import me.ramswaroop.jbot.core.common.Controller
+import me.ramswaroop.jbot.core.common.EventType
 import me.ramswaroop.jbot.core.slack.Bot
-import me.ramswaroop.jbot.core.slack.Controller
-import me.ramswaroop.jbot.core.slack.EventType
 import me.ramswaroop.jbot.core.slack.models.Event
 import me.ramswaroop.jbot.core.slack.models.Message
 import org.ocpsoft.prettytime.PrettyTime
