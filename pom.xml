@@ -15,7 +15,7 @@
     <name>envbot</name>
 
     <properties>
-        <start-class>com.urban.envbot.EnvbotApplication</start-class>
+        <start-class>com.urban.envbot.EnvbotApplicationKt</start-class>
         <kotlin.version>1.2.41</kotlin.version>
     </properties>
 
