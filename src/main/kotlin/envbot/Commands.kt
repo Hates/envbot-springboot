@@ -90,10 +90,11 @@ class ListEnvironments : Bot() {
             logger.info("Listing details for environment $envKey")
             try {
                 val environment = jedis.hget(envKey, "name")
+                val ticket = jedis.hget(envKey, "ticket")
                 val userId = jedis.hget(envKey, "user")
                 val timestamp = jedis.hget(envKey, "timestamp")
 
-                message.append(message(environment, userId, timestamp))
+                message.append(message(environment, ticket, userId, timestamp))
                 message.append("\n")
             } catch(e: Exception) {
                 logger.info("Could not list details for $envKey: ${e.message}")
@@ -103,11 +104,15 @@ class ListEnvironments : Bot() {
         reply(session, event, Message(message.toString()))
     }
 
-    private fun message(environment: String, userId: String?, timestamp: String?): String {
+    private fun message(environment: String, ticket: String?, userId: String?, timestamp: String?): String {
         return if (userId == null) {
             "${environment.toUpperCase()} : Free"
         } else {
-            "${environment.toUpperCase()} : Taken ${parseTimestamp(timestamp)} by `${userDetailsFetcher?.username(userId)}`"
+            if(ticket.isNullOrBlank()) {
+                "${environment.toUpperCase()} : Taken ${parseTimestamp(timestamp)} by `${userDetailsFetcher?.username(userId)}`"
+            } else {
+                "${environment.toUpperCase()} : Taken ${parseTimestamp(timestamp)} by `${userDetailsFetcher?.username(userId)}` `${ticket}`"
+            }
         }
     }
 
@@ -221,14 +226,16 @@ class ReserveEnvironment : Bot() {
         return this
     }
 
-    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^(?:take|taking|using|grabbing) ([a-zA-Z0-9]+)$")
+    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^(?:take|taking|using|grabbing) ([a-zA-Z0-9]+)\\s?(.*)$")
     fun onReceiveMessage(session: WebSocketSession, event: Event, matcher: Matcher) {
         val environment = matcher.group(1).toLowerCase()
+        val ticket = matcher.group(2).toLowerCase()
         val userId = event.userId
-        logger.info("Reserving environment $environment by $userId")
+        logger.info("Reserving environment $environment by $userId with $ticket")
 
         val jedis = Jedis(redisUrl)
         jedis.hset("envbot:${event.channelId}:$environment", "user", userId)
+        jedis.hset("envbot:${event.channelId}:$environment", "ticket", ticket)
         jedis.hset("envbot:${event.channelId}:$environment", "timestamp", System.currentTimeMillis().toString())
 
         reply(session, event, Message(message(environment, userId)))
