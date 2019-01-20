@@ -35,7 +35,7 @@ class AddEnvironment : Bot() {
         return this
     }
 
-    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^add environment ([a-zA-Z0-9]+)$")
+    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^add environment ([a-zA-Z0-9-]+)$")
     fun onReceiveMessage(session: WebSocketSession, event: Event, matcher: Matcher) {
         val environment = matcher.group(1).toLowerCase()
         val channelId = event.channelId
@@ -147,7 +147,7 @@ class ReleaseEnvironment : Bot() {
         return this
     }
 
-    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^(?:done|finished|Done|Finished).*?([a-zA-Z0-9]+)$")
+    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^(?:done|finished|Done|finished).*?([a-zA-Z0-9-]+)$")
     fun onReceiveMessage(session: WebSocketSession, event: Event, matcher: Matcher) {
         val environment = matcher.group(1).toLowerCase()
         val userId = event.userId
@@ -185,7 +185,7 @@ class RemoveEnvironment : Bot() {
         return this
     }
 
-    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^remove environment ([a-zA-Z0-9]+)$")
+    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^remove environment ([a-zA-Z0-9-]+)$")
     fun onReceiveMessage(session: WebSocketSession, event: Event, matcher: Matcher) {
         val environment = matcher.group(1).toLowerCase()
         val channelId = event.channelId
@@ -226,7 +226,7 @@ class ReserveEnvironment : Bot() {
         return this
     }
 
-    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^(?:take|taking|using|grabbing|Take|Taking|Using|Grabbing) ([a-zA-Z0-9]+)\\s?(.*)$")
+    @Controller(events = arrayOf(EventType.MESSAGE), pattern = "^(?:take|taking|using|grabbing|Take|Taking|Using|Grabbing) ([a-zA-Z0-9-]+)\\s?(.*)$")
     fun onReceiveMessage(session: WebSocketSession, event: Event, matcher: Matcher) {
         val environment = matcher.group(1).toLowerCase()
         val ticket = matcher.group(2).toLowerCase()
